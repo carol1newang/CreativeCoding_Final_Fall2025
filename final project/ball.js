@@ -29,21 +29,22 @@ class ball{
   }
 
   drop(speed){
-    if(this.y < height - 30){
-      this.y+=speed;
+    this.speed = speed;
+    if(this.y < height - 60){
+      this.y+=this.speed;
     }
-    else if(this.x > mouseX-20 && this.x < mouseX+30){
+    else if(this.x > mouseX-40 && this.x < mouseX+40){
       if(this.colorIsRed){
         r += 85;
         this.x=random(0, width);
         this.y=0;
       }
-      else if(this.colorIsGreen){
+      if(this.colorIsGreen){
         g += 85;
         this.x=random(0, width);
         this.y=0;
       }
-      else if(this.colorIsBlue){
+      if(this.colorIsBlue){
         b += 85;
         this.x=random(0, width);
         this.y=0;
@@ -52,18 +53,6 @@ class ball{
     else{
       this.x=random(0, width);
       this.y=0;
-    }
-  }
-
-  change(){
-    if (key == 'r'){
-      this.r = lerp(this.r, 255, 0.333);
-    }
-    if (key == 'g'){
-      this.g = lerp(this.g, 255, 0.333);
-    }
-    if (key == 'b'){
-      this.b = lerp(this.b, 255, 0.333);
     }
   }
 }
