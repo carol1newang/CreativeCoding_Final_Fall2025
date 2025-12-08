@@ -13,6 +13,9 @@ let levelSet = false;
 let startSet = true;
 let newLevel = false;
 let nextLevelScreen = false;
+let levelNumber = 1;
+let attempts = 1;
+let finishSet = false;
 
 function setup(){
 	createCanvas(600, 600);
@@ -65,37 +68,66 @@ function draw(){
     levelSet = false;
     newLevel = true;
     print(levelSet);
-    print(newLevel);
   }
   
   if(newLevel == true){
     level();
   }
-  
-  if(nextLevelScreen == true){
+  if(levelNumber == 5 && nextLevelScreen == true){
+     finishScreen();
+  }
+  else if(nextLevelScreen == true){
     nextLevel();
   }
 }
 
+function finishScreen(){
+  background(0);
+  fill(255)
+  ellipse(300, 300, 400, 400);
+  fill(0);
+  textAlign(CENTER);
+  textSize(20);
+  text('CONGRATS!', 300, 210);
+  text('YOU COMPLETED 5 LEVELS!', 300, 240);
+  textSize(50);
+  text('PLAY AGAIN?', 300, 315);
+  
+  finishSet = true;
+}
+
 function startPage(){
-  background(10, 10, 10);
-  fill(255);
+  background(0);
+  fill(255)
+  ellipse(300, 300, 400, 400);
+  fill(0);
   textAlign(CENTER);
   textSize(50);
-  text('START GAME?', 300, 300);
-  rect(200, 400, 200, 100);
+  text('START GAME', 300, 315);
+  levelNumber = 1;
 }
 
 function resetLevel (){
-    r = 0;
-    g = 0;
-    b = 0
-  	randomR = int(random(0, 3));
-	randomG = int(random(0, 3));
-	randomB = int(random(0, 3));
-	levelR = randomR*85;
-	levelG = randomG*85;
-	levelB = randomB*85;
+  r = 0;
+  g = 0;
+  b = 0;
+  
+  randomR = int(random(0, 3));
+  randomG = int(random(0, 3));
+  randomB = int(random(0, 3));
+  
+  levelR = randomR*85;
+  levelG = randomG*85;
+  levelB = randomB*85;
+
+  for (let i = 0; i < reds.length; i++) {
+    reds[i].x = random(0, width);
+    reds[i].y = random(-200, 0);
+    greens[i].x = random(0, width);
+    greens[i].y = random(-200, 0);
+    blues[i].x = random(0, width);
+    blues[i].y = random(-200, 0);
+  }
 }
 
 function level(){
@@ -115,47 +147,71 @@ function level(){
 	blues[i].display();
 	blues[i].drop(random(0.1, 5));
     }
+
   	if(r == levelR && g == levelG && b == levelB){
 	  nextLevelScreen = true;
       newLevel = false;
 	}
   
     if(r > levelR || g > levelG || b > levelB){
-      levelSet = true;
+      attempts += 1;
       r = 0;
       g = 0;
       b = 0;
+      background(255, 0, 0);
+      for (let i = 0; i < reds.length; i++) {
+        reds[i].x = random(0, width);
+        reds[i].y = random(-200, 0);
+        greens[i].x = random(0, width);
+        greens[i].y = random(-200, 0);
+        blues[i].x = random(0, width);
+        blues[i].y = random(-200, 0);
+      }
     }
 }
 
 function nextLevel(){
 	background(r, g, b);
     fill(255);
-    text('NEXT LEVEL', 300, 300);
-    rectMode(CENTER);
-    rect(200, 400, 200, 100);
-
+    ellipse(300, 300, 400, 400);
+    fill(r, g, b);
+    textSize(45);
+    text('NEXT LEVEL', 300, 310);
+    textSize(20);
+    text('LEVEL ' + levelNumber + ' COMPLETE', 300, 210);
+    text('ATTEMPTS: ' + attempts, 300, 400);
 }
 
 function bucket(){
 	rectMode(CENTER);
 	fill(r, g, b);
-	rect(mouseX, height-20, 80, 40);
+	rect(mouseX, height-10, 80, 40);
 }
 
 function mousePressed() {
   if (startSet) {
-    if (mouseX > 200 && mouseX < 400 && mouseY > 400 && mouseY < 500) {
+    if (dist(mouseX, mouseY, 300, 300) < 200) {
       startSet = false;
       levelSet = true;
       newLevel = true;
     }
   }
   if(nextLevelScreen){
-    if (mouseX > 200 && mouseX < 400 && mouseY > 400 && mouseY < 500){
+    if (dist(mouseX, mouseY, 300, 300) < 200){
       newLevel = true;
       levelSet = true;
       nextLevelScreen = false;
+      attempts = 1;
+      levelNumber = levelNumber+1;
+    }
+  }
+  if(finishSet){
+    if (dist(mouseX, mouseY, 300, 300) < 200) {
+      startSet = true;
+      levelNumber = 1;
+      levelSet = false;
+      newLevel = false;
+      finishSet = false;
     }
   }
 }
