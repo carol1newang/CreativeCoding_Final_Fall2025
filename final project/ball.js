@@ -30,25 +30,30 @@ class ball{
 
   drop(speed){
     this.speed = speed;
-    if(this.y < height - 60){
+    if(this.y < height - 40){
       this.y+=this.speed;
     }
-    else if(this.x > mouseX-40 && this.x < mouseX+40){
+    else if(this.x > mouseX-45 && this.x < mouseX+45){
       if(this.colorIsRed){
-        r += 85;
+        r += 255/frac;
         this.x=random(0, width);
         this.y=0;
       }
       if(this.colorIsGreen){
-        g += 85;
+        g += 255/frac;
         this.x=random(0, width);
         this.y=0;
       }
       if(this.colorIsBlue){
-        b += 85;
+        b += 255/frac;
         this.x=random(0, width);
         this.y=0;
+
       }
+      
+      print('R1 ' + r + ' ' + levelR);
+      print('G1 ' + g + ' ' + levelG);
+      print('B1 ' + b + ' ' + levelB);
     }
     else{
       this.x=random(0, width);
