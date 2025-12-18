@@ -23,7 +23,7 @@ class ball{
     ellipse(this.x, this.y, this.size);
   }
 
-  main(r, g, b){
+  main(r, g, b){ // large color indicator for each level
     fill(r, g, b);
     ellipse(this.x, this.y, this.size);
   }
@@ -34,23 +34,36 @@ class ball{
       this.y+=this.speed;
     }
     else if(this.x > mouseX-45 && this.x < mouseX+45){
+      // if bucket touches red, green, or blue droplet, increase bucket color, reset droplet positions, change counter, play sound
       if(this.colorIsRed){
         r += 255/frac;
         this.x=random(0, width);
         this.y=0;
         counterR-=1;
+        if(r <= levelR+1){
+          correct.play();
+        }
+        else{wrong.play()}
       }
       if(this.colorIsGreen){
         g += 255/frac;
         this.x=random(0, width);
         this.y=0;
         counterG-=1;
+        if(g <= levelG+1){
+          correct.play();
+        }
+        else{wrong.play()}
       }
       if(this.colorIsBlue){
         b += 255/frac;
         this.x=random(0, width);
         this.y=0;
         counterB-=1;
+        if(b <= levelB+1){
+          correct.play();
+        }
+        else{wrong.play()}
       }
       
     }
