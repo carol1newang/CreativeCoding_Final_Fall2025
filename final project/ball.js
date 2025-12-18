@@ -38,22 +38,21 @@ class ball{
         r += 255/frac;
         this.x=random(0, width);
         this.y=0;
+        counterR-=1;
       }
       if(this.colorIsGreen){
         g += 255/frac;
         this.x=random(0, width);
         this.y=0;
+        counterG-=1;
       }
       if(this.colorIsBlue){
         b += 255/frac;
         this.x=random(0, width);
         this.y=0;
-
+        counterB-=1;
       }
       
-      print('R1 ' + r + ' ' + levelR);
-      print('G1 ' + g + ' ' + levelG);
-      print('B1 ' + b + ' ' + levelB);
     }
     else{
       this.x=random(0, width);

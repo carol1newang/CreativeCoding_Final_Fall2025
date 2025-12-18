@@ -18,17 +18,23 @@ let attempts = 1;
 let finishSet = false;
 let attemptsCounter = 0;
 let frac = 2;
+let hardLevel;
+
+function preload(){
+  correct = loadSound(correct.mp3);
+  wrong = loadSound(wrong.mp3);
+}
 
 function setup(){
 	createCanvas(600, 600);
 	background(50, 50, 50);
 	noStroke();
 
-	mainBall = new ball(300, 300, 400);
+	mainBall = new ball(300, 300, 420);
 
 	for(let i = 0; i < 2; i++){
 		let x = random(0, width);
-		let y = random(-200, 0);
+		let y = random(-400, -200);
 		let s = 50;
 		let r = 255;
 		let g = 0;
@@ -38,7 +44,7 @@ function setup(){
 
 	for(let i = 0; i < 2; i++){
 		let x = random(0, width);
-		let y = random(-200, 0);
+		let y = random(-400, -200);
 		let s = 50;
 		let r = 0;
 		let g = 255;
@@ -49,7 +55,7 @@ function setup(){
 
 	for(let i = 0; i < 2; i++){
 		let x = random(0, width);
-		let y = random(-200, 0);
+		let y = random(-400, -200);
 		let s = 50;
 		let r = 0;
 		let g = 0;
@@ -85,8 +91,9 @@ function draw(){
 function finishScreen(){
   finishSet = true;
   background(0);
-  fill(255)
+  fill(255);
   ellipse(300, 300, 380, 380);
+  textStyle(BOLD);
   textAlign(CENTER);
   textSize(25);
   text('YOU COMPLETED 6 LEVELS!', 300, 70);
@@ -98,12 +105,31 @@ function finishScreen(){
 
 function startPage(){
   background(0);
-  fill(255)
-  ellipse(300, 300, 400, 400);
-  fill(0);
   textAlign(CENTER);
-  textSize(50);
-  text('START GAME', 300, 315);
+  fill(50, 255, 50);
+  ellipse(170, 170, 280, 280);
+  fill(255, 50, 50);
+  ellipse(430, 430, 280, 280);
+  fill(255);
+  textSize(60);
+  textFont('Helvetica Neue');
+  textStyle(BOLD);
+  text('COLOR CATCHER', 300, 320);
+  fill(0);
+  textSize(35);
+  text('EASY MODE', 170, 180);
+  text('HARD MODE', 430, 440);
+
+  textStyle(NORMAL);
+  textSize(15);
+  if (dist(mouseX, mouseY, 170, 170) < 125) {
+    text('SEE YOUR PROGRESS', 170, 205);
+    text('IN REAL TIME', 170, 220);
+  }
+  if (dist(mouseX, mouseY, 430, 430) < 125) {
+    text('MIX BY MEMORY &', 430, 465);
+    text('COLOR THEORY', 430, 480);
+  }
   speedIncrease = 0;
   levelNumber = 1;
 }
@@ -118,38 +144,67 @@ function resetLevel (){
       randomR = int(random(frac-2, frac));
       randomG = int(random(frac-2, frac));
       randomB = int(random(frac-2, frac));
+      
+      counterR = randomR;
+      counterG = randomG;
+      counterB = randomB;
     }
     else {
       randomR = int(random(frac-3, frac));
       randomG = int(random(frac-3, frac));
-      randomB = int(random(frac-3, frac));}
+      randomB = int(random(frac-3, frac));
+    
+      counterR = randomR;
+      counterG = randomG;
+      counterB = randomB;}
   } while (randomR === 0 && randomG === 0 && randomB === 0);
   
   levelR = round(randomR*(255/frac));
   levelG = round(randomG*(255/frac));
   levelB = round(randomB*(255/frac));
-  print('R' + levelR);
-  print('G' + levelG);
-  print('B' + levelB);
 
   for (let i = 0; i < reds.length; i++) {
     reds[i].x = random(0, width);
-    reds[i].y = random(-200, 0);
+    reds[i].y = random(-400, -200);
     greens[i].x = random(0, width);
-    greens[i].y = random(-200, 0);
+    greens[i].y = random(-400, -200);
     blues[i].x = random(0, width);
-    blues[i].y = random(-200, 0);
+    blues[i].y = random(-400, -200);
   }
 }
 
 function level(){
 	bucket();
 	mainBall.main(levelR, levelG, levelB);
-
     fill(255);
-    textAlign(CENTER);
-    textSize(20);
-    text('R = ' + randomR + ', G = ' + randomG + ', B = ' + randomB, 300, 300);
+    if(levelNumber == 1){
+      textSize(28);
+      textStyle(BOLD);
+      text('CATCH THE DROPLETS', 300, 265);
+      text('TO MATCH THIS COLOR!', 300, 300);
+      fill(255);
+      textAlign(CENTER);
+      textSize(20);
+      textStyle(NORMAL);
+      if(hardLevel === false){
+        text('R = ' + counterR + ', G = ' + counterG + ', B = ' + counterB, 300, 335);
+      }
+      else if(hardLevel === true){
+        text('R = ' + randomR + ', G = ' + randomG + ', B = ' + randomB, 300, 335);
+      }
+    }
+  else{
+      fill(255);
+      textSize(20);
+      textStyle(NORMAL);
+      if(hardLevel === false){
+        text('R = ' + counterR + ', G = ' + counterG + ', B = ' + counterB, 300, 300);
+      }
+      else if(hardLevel === true){
+        text('R = ' + randomR + ', G = ' + randomG + ', B = ' + randomB, 300, 300);
+      }
+    
+  }
    
     for (let i = 0; i < reds.length; i++) {
 	reds[i].display();
@@ -174,18 +229,24 @@ function level(){
       g = 0;
       b = 0;
       background(255, 0, 0);
+      
+      counterR = randomR;
+      counterG = randomG;
+      counterB = randomB;
+      
       for (let i = 0; i < reds.length; i++) {
         reds[i].x = random(0, width);
-        reds[i].y = random(-200, 0);
+        reds[i].y = random(-300, -100);
         greens[i].x = random(0, width);
-        greens[i].y = random(-200, 0);
+        greens[i].y = random(-300, -100);
         blues[i].x = random(0, width);
-        blues[i].y = random(-200, 0);
+        blues[i].y = random(-300, -100);
       }
     }
 }
 
 function nextLevel(){
+    textStyle(BOLD);
 	background(r, g, b);
     fill(255);
     ellipse(300, 300, 380, 380);
@@ -206,10 +267,18 @@ function bucket(){
 
 function mousePressed() {
   if (startSet) {
-    if (dist(mouseX, mouseY, 300, 300) < 200) {
+    if (dist(mouseX, mouseY, 170, 170) < 125) {
       startSet = false;
       levelSet = true;
       newLevel = true;
+      hardLevel = false;
+    }
+    
+    if (dist(mouseX, mouseY, 430, 430) < 125) {
+      startSet = false;
+      levelSet = true;
+      newLevel = true;
+      hardLevel = true;
     }
   }
   if(nextLevelScreen){
